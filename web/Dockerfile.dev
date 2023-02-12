@@ -1,0 +1,11 @@
+FROM node:hydrogen-bullseye
+
+WORKDIR /deps
+
+COPY frontend/package.json /deps/package.json
+
+RUN npm install
+
+WORKDIR /frontend
+
+ENV NODE_PATH=/deps/node_modules

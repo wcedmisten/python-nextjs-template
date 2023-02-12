@@ -1,0 +1,33 @@
+{
+  "name": "make-me-touch-grass",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 80",
+    "build": "next build",
+    "export": "next build && next export",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@next/font": "^13.1.1",
+    "@types/node": "18.11.18",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
+    "axios": "^1.2.2",
+    "eslint": "7.23.0",
+    "eslint-config-next": "12.0.0",
+    "next": "^12.3.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-query": "^3.39.2",
+    "typescript": "4.9.4",
+    "uuid": "^9.0.0"
+  },
+  "proxy": "http://localhost:8000",
+  "devDependencies": {
+    "@types/uuid": "^9.0.0"
+  }
+}

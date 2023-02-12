@@ -1,0 +1,39 @@
+services:
+    database:
+        build: database
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=postgres
+        volumes:
+            - database-volume:/var/lib/postgresql/data
+
+    reverseproxy:
+        build: reverseproxy
+        ports:
+            - 8080:8080
+        restart: always
+
+    frontend:
+        build: web
+        depends_on:
+            - reverseproxy
+        restart: always
+
+    backend:
+        depends_on:
+            - reverseproxy
+            - database
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        build: backend
+        restart: always
+
+volumes:
+  database-volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/postgres_data'
