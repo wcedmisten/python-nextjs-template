@@ -7,7 +7,7 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_DB=postgres
         volumes:
-            - database-volume:/var/lib/postgresql/data
+            - ./postgres_data:/var/lib/postgresql/data
 
     reverseproxy:
         build: reverseproxy
@@ -29,11 +29,3 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         build: backend
         restart: always
-
-volumes:
-  database-volume:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '${PWD}/postgres_data'
