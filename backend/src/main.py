@@ -1,12 +1,14 @@
-from time import sleep
 from fastapi import FastAPI
+import os
 import psycopg2
 from pydantic import BaseModel
-import os
 
-POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+if not POSTGRES_PASSWORD:
+    raise RuntimeError("PostgreSQL password not found in environment variables.")
 
-con = psycopg2.connect(
+
+conn = psycopg2.connect(
     dbname="postgres",
     user="postgres",
     password=POSTGRES_PASSWORD,
@@ -14,37 +16,67 @@ con = psycopg2.connect(
     port="5432",
 )
 
-cur = con.cursor()
+cur = conn.cursor()
 
 # DB model
 class Test(BaseModel):
     field_1: str
 
+
 app = FastAPI()
 
 
-async def get_tests():
+async def get_tests() -> list[Test]:
+    """
+    Get test data from the database.
+
+    Returns:
+        list[Test]: A list of Test objects representing the retrieved test data.
+    """
     cur.execute("SELECT * FROM test;")
     rows = cur.fetchall()
+    return [Test(field_1=row[0]) for row in rows]
 
-    return list(
-        [{"field_1": row[0]} for row in rows]
-    )
 
-async def post_test(test: Test):
-    sleep(2)
+async def post_test(test: Test) -> None:
+    """
+    Insert test data into the database.
+
+    Args:
+        test (Test): The Test object to be inserted into the database.
+
+    Returns:
+        None
+    """
     cur.execute(
         "INSERT INTO test VALUES(%s)",
-        (
-            test.field_1,
-        ),
+        (test.field_1,),
     )
-    con.commit()
+    conn.commit()
+
 
 @app.get("/tests", response_model=list[Test])
-async def read_user_details():
+async def read_test_details() -> list[Test]:
+    """
+    Route handler to get test data.
+
+    Returns:
+        List[Test]: A list of Test objects representing the retrieved test data.
+    """
+
     return await get_tests()
 
+
 @app.post("/test")
-async def put_user_details(test: Test):
+async def put_test_details(test: Test) -> None:
+    """
+    Route handler to insert test data.
+
+    Args:
+        test (Test): The Test object to be inserted into the database.
+
+    Returns:
+        None
+    """
+
     return await post_test(test)

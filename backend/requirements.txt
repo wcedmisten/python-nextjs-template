@@ -1,4 +1,4 @@
 fastapi[all]
-python-jose[cryptography]
-passlib
+gunicorn
+loguru
 psycopg2-binary
