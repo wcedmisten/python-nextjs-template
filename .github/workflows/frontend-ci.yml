@@ -1,0 +1,28 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - name: Install dependencies
+      working-directory: web/frontend
+      run: npm ci
+    - name: Run lint
+      working-directory: web/frontend
+      run: npm run lint
+    - name: Run format check
+      working-directory: web/frontend
+      run: npm run format
