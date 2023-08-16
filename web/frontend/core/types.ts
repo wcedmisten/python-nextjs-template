@@ -1,3 +1,3 @@
 export interface Test {
-    field_1: string;
+  field_1: string;
 }
