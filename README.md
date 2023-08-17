@@ -44,3 +44,9 @@ Production Deployment
 ```bash
 docker compose up
 ```
+
+# FAQ
+
+## WSL2: Database docker keep logging `fixing permissions on existing directory /var/lib/postgresql/data ...`
+
+Move your project to the WSL2 filesystem (e.g. `~/projects`)
